@@ -1,0 +1,5 @@
+﻿  SDLKIT.cpp
+c:\users\chris\documents\visual studio 2017\projects\sdlkit_v2\sdlkit_v2\sdlkit.cpp(55): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\string.h(93): note: see declaration of 'strcat'
+  SDLKIT_V2.vcxproj -> C:\Users\chris\documents\visual studio 2017\Projects\SDLKIT_V2\Debug\SDLKIT_V2.exe
+  SDLKIT_V2.vcxproj -> C:\Users\chris\documents\visual studio 2017\Projects\SDLKIT_V2\Debug\SDLKIT_V2.pdb (Partial PDB)
