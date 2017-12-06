@@ -1,0 +1,4 @@
+Rock.bmp
+Bush.bmp
+lazer.bmp
+arrow.bmp

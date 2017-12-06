@@ -1,0 +1,89 @@
+#include "Object.h"
+
+Object::Object() {
+	cout << this << " Object created " << "EMPTY" << ' ' << endl;
+};
+
+Object::Object(SDL_Texture * _texture, double x, double y, int w, int h)
+	: Sprite(_texture, x, y, w, h), collidable(true), accel(0, 0), velocity(0, 0),  position(x, y), angle(0) {
+	addVec();
+	cout << this << " Object created " << ID << ' ' << endl;
+}
+
+Object::Object(SDL_Texture * _texture, double x, double y, int w, int h, double _angle)
+	: Sprite(_texture, x, y, w, h), collidable(true), accel(0, 0), velocity(0, 0), position(x, y), angle(_angle){
+	addVec();
+	cout << this << " Object created " << ID << ' ' << endl;
+}
+
+Object::~Object() {
+	cout << this << " Object destroyed " << ID << ' ' << endl;
+}
+
+void Object::addVec() {
+	ovec.push_back(this);
+};
+
+void Object::deleteAll() {
+	for (auto it = ovec.begin(); it != ovec.end();)
+	{
+		if (*it != nullptr)
+			delete *it;
+		it = ovec.erase(it);
+	}
+}
+
+Object& Object::setXAccel(const double& val) {
+	accel.first = val;
+	return *this;
+}
+
+Object& Object::setYAccel(const double& val) {
+	accel.second = val;
+	return *this;
+}
+
+Object& Object::setVelocity(const unsigned int& t_past) {
+	//Use acceleration
+	////v = v0 + at
+	//cout << t_past << " ms -\n";
+	velocity.second = (velocity.second + ((accel.second) * (double)t_past / 1000));
+	velocity.first = (velocity.first + ((accel.first) * (double)t_past / 1000));
+	//cout << accel.first << ' ' << accel.second << endl;
+	//cout << "X: " << velocity.first << " Y: " << velocity.second << "\n-\n";
+	velocity.first = (velocity.first) * (pow((double)KINETIC_FRICTION, (double)t_past / 1000));
+	velocity.second = (velocity.second) * (pow((double)KINETIC_FRICTION, (double)t_past / 1000));
+	//cout << "X: " << velocity.first << " Y: " << velocity.second << "\n-\n";
+	return *this;
+}
+
+Object& Object::setVelocity(const COORD& vel) {
+	velocity.first = vel.first;
+	velocity.second = vel.second;
+	return *this;
+}
+
+//Rectangle is being lame as fuck because it uses integers - messes up physics math.
+Object& Object::setPosition() {
+	position.first += velocity.first;
+	position.second += velocity.second;
+	rect.x = position.first - rect.w / 2;
+	rect.y = position.second - rect.h / 2;
+	return *this;
+}
+
+
+
+void Object::reboundX() {
+	velocity.first = -velocity.first * KINETIC_FRICTION;
+}
+void Object::reboundY() {
+	velocity.second = -velocity.second * KINETIC_FRICTION;
+}
+
+double Object::Y_GRAVITY = X_GRAV;
+double Object::X_GRAVITY = Y_GRAV;
+//Z Gravity for the dimension of friction on a 2D Surface.
+double Object::Z_GRAVITY = Z_GRAV;
+
+OVEC Object::ovec;
