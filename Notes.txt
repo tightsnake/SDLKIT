@@ -1,0 +1,6 @@
+Currently, memory management could use some work.  The Object vector is storing Objects based on their ID, but the vector does not dynamically resize very well
+if say an Object was deleted, it will be an empty hole in the vector and remain there throughout the length of the program occupying memory.
+Linked List?
+Vector of pointers
+
+Textwriter is probably messing everything up.

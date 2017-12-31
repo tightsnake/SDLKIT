@@ -1,0 +1,9 @@
+Rock.bmp
+Bush.bmp
+dirt.png
+lazer.bmp
+arrow.bmp
+goblin.png
+arrow.png
+julia.png
+blood.png
