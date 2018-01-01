@@ -22,12 +22,10 @@ public:
 	SDL_Texture * getTexture() { return texture; }
 	SDL_Rect& getRect() { return rect; }
 	SDL_Rect& getSect() { return sect; }
-	bool setDestruct(bool boolean) { return (destruct = boolean); }
 protected:
 	static unsigned int count;
 	unsigned int ID;
 	SDL_Rect rect, sect;
 	SDL_Texture * texture;
 	int pwsheet, phsheet, fwsheet, fhsheet;
-	bool destruct;
 };

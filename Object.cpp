@@ -13,6 +13,20 @@ Object::Object(SDL_Texture * _texture, double x, double y, int w, int h, double 
 }
 
 Object::~Object() {
+	//When an Object destructs, it should automatically remove itself from all vectors.
+	//This is actually the solution to the projectile bug!
+	for (auto it = Object::opvec.begin(); it != Object::opvec.end();)
+		if ((*it)->getID() == getID())
+			it = Object::opvec.erase(it);
+		else
+			++it;
+
+	for (auto it = Object::ovec.begin(); it != Object::ovec.end();)
+		if ((*it)->getID() == getID()) {
+			it = Object::ovec.erase(it);
+		}
+		else
+			++it;
 
 	cout << this << " Object destroyed " << ID << ' ' << endl;
 }
@@ -26,10 +40,8 @@ void Object::addPVec() {
 };
 
 void Object::deleteAll() {
-	for (auto it = ovec.begin(); it != ovec.end();++it)
-	{
-		if (*it != nullptr)
-			delete *it;
+	while (ovec.size() > 0) {
+		delete ovec.at(0);
 	}
 }
 

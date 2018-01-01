@@ -3,6 +3,7 @@
 #include "TexturePack.h"
 #include "Playable.h"
 #include "NPC.h"
+#include "Effect.h"
 #include <iostream>
 #include <utility>
 #include <vector>

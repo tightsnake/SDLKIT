@@ -57,8 +57,7 @@ public:
 	static void setZGravity(const double& gravity) { Z_GRAVITY = gravity; }
 	static const double& getZGravity() { return Z_GRAVITY; }
 
-	static OVEC ovec;
-	static OVEC opvec;
+	static OVEC ovec, opvec;
 
 protected:
 	static double Y_GRAVITY;
