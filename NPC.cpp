@@ -6,6 +6,18 @@ NPC::NPC() {
 }
 
 NPC::~NPC() {
+	for (auto it = NPC::nvec.begin(); it != NPC::nvec.end();)
+		if ((*it)->getID() == getID())
+			it = NPC::nvec.erase(it);
+		else
+			++it;
+	for (auto it = Object::ovec.begin(); it != Object::ovec.end();)
+		if ((*it)->getID() == getID()) {
+			it = Object::ovec.erase(it);
+		}
+		else
+			++it;
+
 	cout << this << " NPC destroyed " << ID << endl;
 }
 

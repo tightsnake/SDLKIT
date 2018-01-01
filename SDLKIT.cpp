@@ -190,6 +190,7 @@ void SDLKIT::processKeys() {
 }
 
 void SDLKIT::process() {
+
 	processKeys();
 
 	// This is how we can get the time past between processing data, and
@@ -198,47 +199,36 @@ void SDLKIT::process() {
 	unsigned int t_past = t_current - t_last;
 	t_last = t_current;
 
+
+	//THIS WHOLE SECTION REALLY NEEDS WORK, IT CURRENTLY DELETES THE WRONG PROJECTILE IF
+	//MORE THAN ONE PROJECTILE IS IN FLIGHT
+	//RETHINK COMBAT MECHANICS ENTIRELY IN MY OPINION, SOMETHING MORE SCALABLE.
+	//***FIXED*** 12/31/17
 	for (auto& npc : NPC::nvec) {
 		npc->AI(t_past, player);
+		//We may want to actually create a class for projectiles themselves... idk yet
 		for (auto& projectile : Object::opvec) {
 			if (collision(projectile, npc)) {
 				npc->setVelocity(COORD(npc->readVelocity().first + projectile->readVelocity().first / 5,
 					npc->readVelocity().second + projectile->readVelocity().second / 5));
-				for (auto it = Object::opvec.begin(); it != Object::opvec.end();)
-					if ((*it)->getID() == projectile->getID())
-						it = Object::opvec.erase(it);
-					else
-						++it;
-				for (auto it = Object::ovec.begin(); it != Object::ovec.end();)
-					if ((*it)->getID() == projectile->getID())
-						it = Object::ovec.erase(it);
-					else
-						++it;
+				//IF DEALING DAMAAGE RETURNS TRUE THAT THE NPC HP IS <= 0
+				//KILL HIM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				if (npc->dealDamage(1))
+					delete npc;
+				new Effect(tpack.getTexture("blood.png"), projectile->readPosition().first, projectile->readPosition().second,
+					64, 64, 500, 96, 32, 3, 1);
 				delete projectile;
-				npc->dealDamage(1);
+				//NEW EFFECT BLOOD GOES HERE			
 			}
 		}
 	}
-		for (auto it = NPC::nvec.begin(); it != NPC::nvec.end();){
-			if ((*it)->getHP() <= 0) {
-				for (auto oit = Object::ovec.begin(); oit != Object::ovec.end();)
-					if ((*oit)->getID() == (*it)->getID()) {
-						oit = Object::ovec.erase(oit);
-					}
-					else
-						++oit;
-				delete (*it);
-				it = NPC::nvec.erase(it);
-			}
-			else
-				++it;
-	}
-	//Positions
-	//player->setVelocity(t_past).setPosition();
 	//Thank god for OOP and return types of reference&
 	for (auto& obj : Object::ovec)
 		obj->setVelocity(t_past).setFrame(t_past).setPosition();
 
+	for (auto& effect : Effect::evec)
+		if (effect->decay(t_past))
+			delete effect;
 }
 
 void SDLKIT::mainLoop() {
